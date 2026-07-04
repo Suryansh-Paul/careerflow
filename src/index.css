@@ -25,6 +25,8 @@ body {
 }
 
 /* SIDEBAR */
+
+
 aside {
   width: 240px;
   background-color: #111827;
@@ -33,36 +35,30 @@ aside {
   min-height: calc(100vh - 60px);
 }
 
-/* SIDEBAR LIST */
 aside ul {
   list-style: none;
+  padding: 0;
 }
 
 aside li {
-  margin: 6px 0;
+  margin: 4px 0;
 }
 
-/* LINKS */
 aside a {
   display: block;
-  padding: 10px 18px;
-  color: #d1d5db;
+  padding: 12px 20px;
+  color: #cbd5e1;
   text-decoration: none;
-  border-radius: 6px;
-  transition: background-color 0.2s ease;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
 }
 
-/* SIMPLE HOVER (NOT OVERDONE) */
 aside a:hover {
   background-color: #1f2937;
   color: #ffffff;
+  border-left: 3px solid #3b82f6;
 }
-
-/* ACTIVE FEEL (BASIC) */
-aside a:active {
-  transform: scale(0.98);
-}
-
 /* MAIN CONTENT AREA */
 main,
 #content {
