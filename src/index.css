@@ -67,12 +67,58 @@ main,
 }
 
 /* NAVBAR */
+/* =========================
+   NAVBAR (EVANZOFLOW STYLE)
+========================= */
+
 nav {
-  height: 60px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
+  height: 64px;
+  width: 100%;
+  background: #111b31; /* dark navy SaaS */
+  color: #ffffff;
+
   display: flex;
   align-items: center;
-  padding: 0 20px;
-  font-weight: 600;
+  justify-content: space-between;
+
+  padding: 0 24px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
+
+/* =========================
+   LEFT BRAND SECTION
+========================= */
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* LOGO IMAGE PLACEHOLDER */
+.nav-brand img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+/* BRAND TEXT */
+.nav-brand span {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+}
+
+/* optional accent for EVANZO part feel */
+.nav-brand span::first-letter {
+  color: #60a5fa;
+}
+
+
+
