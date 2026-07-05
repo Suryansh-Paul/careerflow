@@ -1,13 +1,25 @@
 import Navbar from "./Navbar"
 import Sidebar from "./Sidebar"
 import { Outlet } from "react-router-dom"
+import { useState } from "react"
+
+
 function Layout(){
+   
+    const[isSidebarOpen, setisSidebarOpen]= useState(false);
+
+    function toggleSidebar() {
+    setisSidebarOpen(!isSidebarOpen);
+}
+
+
+
     return(
     <>
     <div id="container">
-    <Navbar/>
+    <Navbar toggleSidebar={toggleSidebar} />
     <div id="main" style={{ display: "flex" }}>
-    <Sidebar/>
+    <Sidebar isOpen={isSidebarOpen}/>
     <Outlet/>
     </div>
     </div>

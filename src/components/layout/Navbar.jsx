@@ -1,9 +1,9 @@
 import { FiMenu } from "react-icons/fi";
-function Navbar() {
+function Navbar({toggleSidebar}) {
   return (
     <nav>
       <div className="nav-left">
-        <button className="menu-btn"><FiMenu/></button>
+        <button onClick={toggleSidebar} className="menu-btn"><FiMenu/></button>
         <div className="nav-brand">
         <img src="/logoecf.jpg" alt="EVANZOFLOW logo" />
         <span>EVANZOFLOW</span>

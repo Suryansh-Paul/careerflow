@@ -26,15 +26,33 @@ body {
 
 /* SIDEBAR */
 
-aside {
-  width: 240px;
+
+.sidebar-open {
+  width: 235px;
   min-height: calc(100vh - 70px);
 
   background-color: #172033;
   border-right: 1px solid rgba(255, 255, 255, 0.06);
 
   padding: 24px 0;
+
+  transition: width 0.25s ease;
 }
+
+
+
+.sidebar-close {
+  width: 75px;
+  min-height: calc(100vh - 70px);
+
+  background-color: #172033;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+
+  padding: 24px 0;
+
+  transition: width 0.25s ease;
+}
+
 
 
 aside ul {
@@ -48,34 +66,62 @@ aside li {
 
 
 aside a {
-  text-decoration: none;
-  color: #d1d5db;
-
   display: flex;
   align-items: center;
   gap: 14px;
 
   padding: 12px 24px;
 
+  text-decoration: none;
+  color: #d1d5db;
+
   font-size: 15px;
   font-weight: 500;
 
-  transition: background-color 0.2s ease,
-              color 0.2s ease;
-}
+  border-left: 3px solid transparent;
 
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-left-color 0.2s ease;
+}
 
 
 aside a svg {
   font-size: 18px;
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
 }
+
+
+
+.sidebar-label {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+
+  transition: max-width 0.25s ease, opacity 0.2s ease;
+}
+
+.sidebar-label.show {
+  max-width: 150px;
+  opacity: 1;
+}
+.sidebar-close a {
+  padding: 12px 24px;
+}
+
 
 
 aside a:hover {
   background-color: #243047;
   color: #ffffff;
+  border-left-color: #3b82f6;
 }
+
+
 /* MAIN CONTENT AREA */
 main,
 #content {
