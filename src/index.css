@@ -121,6 +121,11 @@ aside a:hover {
   border-left-color: #3b82f6;
 }
 
+aside a.active {
+  background-color: #1f2a38;
+  color: #ffffff;
+  border-left: 3px solid #3b82f6;
+}
 
 /* MAIN CONTENT AREA */
 main,

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   FiHome,
   FiFileText,
@@ -13,57 +13,69 @@ function Sidebar({ isOpen }) {
     <aside className={isOpen ? "sidebar-open" : "sidebar-close"}>
       <ul>
         <li>
-          <Link to="/">
+          <NavLink to="/" className={(navData)=>
+            navData.isActive ? "active" : ""
+          }>
             <FiHome />
             <span className={isOpen ? "sidebar-label show" : "sidebar-label"}>
               Dashboard
             </span>
-          </Link>
+          </NavLink>
         </li>
 
         <li>
-          <Link to="/applications">
+          <NavLink to="/applications" className={(navData)=>
+            navData.isActive ? "active" : ""
+          }>
             <FiClipboard />
             <span className={isOpen ? "sidebar-label show" : "sidebar-label"}>
               Applications
             </span>
-          </Link>
+          </NavLink>
         </li>
 
         <li>
-          <Link to="/companies">
+          <NavLink to="/companies" className={(navData)=>
+            navData.isActive ? "active" : ""
+          }>
             <FiBriefcase />
             <span className={isOpen ? "sidebar-label show" : "sidebar-label"}>
               Companies
             </span>
-          </Link>
+          </NavLink>
         </li>
 
         <li>
-          <Link to="/interviews">
+          <NavLink to="/interviews" className={(navData)=>
+            navData.isActive ? "active" : ""
+          }>
             <FiCalendar />
             <span className={isOpen ? "sidebar-label show" : "sidebar-label"}>
               Interviews
             </span>
-          </Link>
+          </NavLink>
         </li>
 
         <li>
-          <Link to="/resumes">
+          <NavLink to="/resumes" className={(navData)=>
+            navData.isActive ? "active" : ""
+          }>
             <FiFileText />
             <span className={isOpen ? "sidebar-label show" : "sidebar-label"}>
               Resumes
             </span>
-          </Link>
+          </NavLink>
         </li>
 
         <li>
-          <Link to="/statistics">
+          <NavLink to="/statistics" className={(navData)=>
+            navData.isActive ? "active" : ""
+          }>
             <FiBarChart2 />
             <span className={isOpen ? "sidebar-label show" : "sidebar-label"}>
               Statistics
             </span>
-          </Link>
+          </NavLink>
         </li>
       </ul>
     </aside>
