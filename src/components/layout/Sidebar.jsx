@@ -1,4 +1,12 @@
 import { Link } from "react-router-dom";
+import {
+  FiHome,
+  FiFileText,
+  FiBriefcase,
+  FiCalendar,
+  FiFile,
+  FiBarChart2,
+} from "react-icons/fi";
 function Sidebar(){
     return(
          
@@ -7,22 +15,22 @@ function Sidebar(){
         <aside>
          <ul>
          
-            <li><Link to="/" > Dashboard </Link></li>
+            <li><Link to="/" > <FiHome/> Dashboard </Link></li>
             
          
-            <li><Link to="/applications" > Applications </Link></li>
+            <li><Link to="/applications" > <FiFileText/>  Applications </Link></li>
             
             
-            <li><Link to="/companies" > Companies </Link></li>
+            <li><Link to="/companies" > <FiBriefcase/> Companies</Link></li>
        
           
-            <li><Link to="/interviews" > Interviews </Link></li>
+            <li><Link to="/interviews" >  <FiCalendar/> Interviews</Link></li>
          
             
-            <li><Link to="/resumes" > Resumes </Link></li>
+            <li><Link to="/resumes" > <FiFile/> Resumes</Link></li>
       
            
-            <li><Link to="/statistics" > Statistics </Link></li>
+            <li><Link to="/statistics" > <FiBarChart2/> Statistics </Link></li>
      
             
             
