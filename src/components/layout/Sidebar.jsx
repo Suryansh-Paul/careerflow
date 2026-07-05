@@ -4,7 +4,7 @@ import {
   FiFileText,
   FiBriefcase,
   FiCalendar,
-  FiFile,
+  FiClipboard,
   FiBarChart2,
 } from "react-icons/fi";
 function Sidebar(){
@@ -18,7 +18,7 @@ function Sidebar(){
             <li><Link to="/" > <FiHome/> Dashboard </Link></li>
             
          
-            <li><Link to="/applications" > <FiFileText/>  Applications </Link></li>
+            <li><Link to="/applications" > <FiClipboard/>  Applications </Link></li>
             
             
             <li><Link to="/companies" > <FiBriefcase/> Companies</Link></li>
@@ -27,7 +27,7 @@ function Sidebar(){
             <li><Link to="/interviews" >  <FiCalendar/> Interviews</Link></li>
          
             
-            <li><Link to="/resumes" > <FiFile/> Resumes</Link></li>
+            <li><Link to="/resumes" > <FiFileText/> Resumes</Link></li>
       
            
             <li><Link to="/statistics" > <FiBarChart2/> Statistics </Link></li>
