@@ -66,32 +66,70 @@ main,
   padding: 20px;
 }
 
-/* NAVBAR */
-/* =========================
-   NAVBAR (EVANZOFLOW STYLE)
-========================= */
+
+/* 
+   NAVBAR CONTAINER
+*/
 
 nav {
-  height: 64px;
+  height: 70px;
   width: 100%;
-  background: #111b31; /* dark navy SaaS */
+  background: #0f172a; /* dark professional blue-black */
   color: #ffffff;
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
 
   padding: 0 24px;
 
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
 
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
-/* =========================
-   LEFT BRAND SECTION
-========================= */
+/*
+   LEFT SECTION (MENU + BRAND)
+ */
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* 
+   HAMBURGER BUTTON
+ */
+
+.menu-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px;
+  border-radius: 8px;
+
+  color: #e2e8f0; /* soft white */
+  font-size: 22px;
+
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.menu-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.menu-btn:active {
+  transform: scale(0.95);
+}
+
+/* 
+   BRAND SECTION
+ */
 
 .nav-brand {
   display: flex;
@@ -99,30 +137,39 @@ nav {
   gap: 10px;
 }
 
-/* LOGO IMAGE PLACEHOLDER */
+/* LOGO IMAGE */
 .nav-brand img {
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
+
   object-fit: contain;
-  border-radius: 6px;
+
+  border-radius: 10px; 
 }
 
 /* BRAND TEXT */
 .nav-brand span {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: 0.8px;
-  color: #ffffff;
+  letter-spacing: 1px;
+
+  color: #f8fafc;
 }
 
-/* optional accent for EVANZO part feel */
-.nav-brand span::first-letter {
-  color: #60a5fa;
+
+.nav-brand span {
+  position: relative;
 }
 
-.menu-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
+.nav-brand span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
 
+  width: 100%;
+  height: 2px;
+
+  background: linear-gradient(90deg, #60a5fa, transparent);
+  opacity: 0.4;
+}
