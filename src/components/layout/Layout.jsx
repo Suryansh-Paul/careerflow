@@ -20,7 +20,14 @@ function Layout(){
     <Navbar toggleSidebar={toggleSidebar} />
     <div id="main" style={{ display: "flex" }}>
     <Sidebar isOpen={isSidebarOpen}/>
-    <Outlet/>
+    <div
+        id="content"
+        style={{
+            marginLeft: isSidebarOpen ? "235px" : "75px"
+        }}
+            >
+        <Outlet />
+    </div>
     </div>
     </div>
     </>

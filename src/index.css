@@ -19,38 +19,58 @@ body {
 }
 
 /* MAIN LAYOUT (SIDEBAR + CONTENT) */
-#main {
-  display: flex;
-  flex: 1;
-}
+#main{
+  display:flex;
+  flex:1;
 
+  margin-top:70px;
+}
 /* SIDEBAR */
 
 
-.sidebar-open {
-  width: 235px;
-  min-height: calc(100vh - 70px);
+.sidebar-open{
 
-  background-color: #172033;
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  position:fixed;
 
-  padding: 24px 0;
+  top:70px;
+  left:0;
 
-  transition: width 0.25s ease;
+  width:235px;
+  height:calc(100vh - 70px);
+
+  overflow-y:auto;
+
+  background:#172033;
+
+  border-right:1px solid rgba(255,255,255,.06);
+
+  padding:24px 0;
+
+  transition:width .25s ease;
+
 }
 
 
+.sidebar-close{
 
-.sidebar-close {
-  width: 75px;
-  min-height: calc(100vh - 70px);
+  position:fixed;
 
-  background-color: #172033;
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  top:70px;
+  left:0;
 
-  padding: 24px 0;
+  width:75px;
+  height:calc(100vh - 70px);
 
-  transition: width 0.25s ease;
+  overflow-y:auto;
+
+  background:#172033;
+
+  border-right:1px solid rgba(255,255,255,.06);
+
+  padding:24px 0;
+
+  transition:width .25s ease;
+
 }
 
 
@@ -129,20 +149,34 @@ aside a.active {
 
 /* MAIN CONTENT AREA */
 main,
-#content {
-  flex: 1;
-  padding: 20px;
-}
+#content{
 
+  flex:1;
+
+  height:calc(100vh - 70px);
+
+  overflow-y:auto;
+
+  transition:margin-left .25s ease;
+
+}
 
 /* 
    NAVBAR CONTAINER
 */
 
 nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  z-index: 1000;
+
   height: 70px;
   width: 100%;
-  background: #0f172a; /* dark professional blue-black */
+
+  background: #0f172a;
   color: #ffffff;
 
   display: flex;
@@ -150,9 +184,7 @@ nav {
 
   padding: 0 24px;
 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  border-bottom: 1px solid rgba(255,255,255,.06);
 }
 
 /*
