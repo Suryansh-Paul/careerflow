@@ -1,0 +1,11 @@
+.avatar-img { border-radius: 50%; object-fit: cover; border: 1px solid var(--border-default); }
+.avatar-fallback {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--text-on-accent);
+  background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
+  border: 1px solid var(--border-accent);
+}

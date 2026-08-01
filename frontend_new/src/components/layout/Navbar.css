@@ -1,0 +1,121 @@
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: rgba(10, 18, 32, 0.86);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-subtle);
+  z-index: 100;
+}
+.navbar-left { display: flex; align-items: center; gap: 8px; }
+.navbar-icon-btn {
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  position: relative;
+  transition: background var(--duration-fast), color var(--duration-fast), transform var(--duration-fast);
+}
+.navbar-icon-btn:hover { background: var(--surface-2); color: var(--text-primary); transform: translateY(-1px); }
+
+.navbar-brand { display: flex; align-items: center; gap: 10px; margin-left: 6px; }
+.navbar-logo {
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: #061020;
+  background: linear-gradient(135deg, var(--blue-300), var(--blue-500));
+  box-shadow: 0 0 16px rgba(59,130,246,0.45);
+}
+.navbar-brand-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+}
+
+.navbar-right { display: flex; align-items: center; gap: 8px; }
+
+.navbar-search {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+  background: var(--bg-sunken);
+  color: var(--text-muted);
+  font-size: 13px;
+  width: 260px;
+  transition: border-color var(--duration-fast), background var(--duration-fast);
+}
+.navbar-search:hover { border-color: var(--border-strong); background: var(--surface-1); }
+.navbar-search kbd {
+  margin-left: auto;
+  font-size: 10.5px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: var(--surface-3);
+  color: var(--text-muted);
+}
+
+.navbar-dot {
+  position: absolute;
+  top: 7px; right: 8px;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--blue-400);
+  box-shadow: 0 0 6px var(--accent-glow);
+}
+
+.navbar-avatar-btn { border-radius: 50%; transition: box-shadow var(--duration-fast); }
+.navbar-avatar-btn:hover { box-shadow: 0 0 0 3px rgba(59,130,246,0.22); }
+
+.navbar-popover-wrap { position: relative; }
+.navbar-popover {
+  position: absolute;
+  top: 48px; right: 0;
+  min-width: 240px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 8px;
+  animation: pop-in 0.16s var(--ease-standard);
+  z-index: 150;
+}
+@keyframes pop-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+.popover-header { padding: 10px 10px 8px; }
+.popover-name { font-size: 13.5px; font-weight: 600; color: var(--text-primary); }
+.popover-email { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+.popover-item {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: background var(--duration-fast), color var(--duration-fast);
+}
+.popover-item:hover { background: var(--surface-2); color: var(--text-primary); }
+.popover-item.danger { color: var(--danger); }
+.popover-item.danger:hover { background: var(--danger-soft); }
+.popover-divider { height: 1px; background: var(--border-subtle); margin: 6px 4px; }
+
+.notif-popover { width: 300px; }
+.notif-item { padding: 10px; border-radius: 8px; position: relative; }
+.notif-item.unread { background: rgba(59,130,246,0.06); }
+.notif-item.unread::before { content: ''; position: absolute; left: 3px; top: 16px; width: 5px; height: 5px; border-radius: 50%; background: var(--blue-400); }
+.notif-title { font-size: 12.75px; color: var(--text-primary); padding-left: 10px; }
+.notif-time { font-size: 11px; color: var(--text-muted); padding-left: 10px; margin-top: 2px; }

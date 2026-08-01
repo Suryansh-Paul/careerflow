@@ -1,0 +1,36 @@
+.ai-teaser { padding: 18px 22px; margin-bottom: 22px; }
+.ai-teaser-icon {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--accent-soft);
+  color: var(--blue-300);
+  flex-shrink: 0;
+}
+.upcoming-pill {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--info-soft);
+  color: var(--blue-300);
+  white-space: nowrap;
+}
+
+.resume-list { display: flex; flex-direction: column; gap: 10px; }
+.resume-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+}
+.resume-icon {
+  width: 40px; height: 40px;
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface-2);
+  color: var(--blue-300);
+  flex-shrink: 0;
+}
+.resume-info { flex: 1; min-width: 0; }

@@ -1,0 +1,11 @@
+.app-main {
+  padding-top: var(--nav-height);
+  margin-left: var(--sidebar-w-expanded);
+  transition: margin-left var(--duration-slow) var(--ease-standard);
+  min-height: 100vh;
+}
+.app-main.is-collapsed { margin-left: var(--sidebar-w-collapsed); }
+
+@media (max-width: 900px) {
+  .app-main, .app-main.is-collapsed { margin-left: 0; }
+}

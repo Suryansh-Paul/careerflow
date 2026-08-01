@@ -1,0 +1,15 @@
+.progress-track {
+  width: 100%;
+  background: var(--surface-2);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+.progress-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width var(--duration-slow) var(--ease-standard);
+}
+.progress-fill.tone-accent { background: linear-gradient(90deg, var(--blue-500), var(--blue-300)); }
+.progress-fill.tone-success { background: linear-gradient(90deg, #10b981, var(--success)); }
+.progress-fill.tone-warning { background: linear-gradient(90deg, #f59e0b, var(--warning)); }

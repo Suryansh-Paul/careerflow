@@ -1,0 +1,78 @@
+:root {
+  /* ---- Core surfaces ---- */
+  --bg-app: #07111F;
+  --bg-sunken: #060D18;
+  --bg-elevated: #0F1B2E;
+  --surface-1: #0F172A;
+  --surface-2: #102A43;
+  --surface-3: #14304F;
+  --surface-hover: #17385c;
+
+  /* ---- Borders ---- */
+  --border-subtle: rgba(148, 178, 214, 0.12);
+  --border-default: rgba(148, 178, 214, 0.18);
+  --border-strong: rgba(148, 178, 214, 0.28);
+  --border-accent: rgba(59, 130, 246, 0.45);
+
+  /* ---- Text ---- */
+  --text-primary: #EAF2FB;
+  --text-secondary: #A9BBD4;
+  --text-muted: #6E82A3;
+  --text-faint: #4C5D7A;
+  --text-on-accent: #F5FAFF;
+
+  /* ---- Brand blues ---- */
+  --blue-950: #07111F;
+  --blue-900: #0F172A;
+  --blue-800: #102A43;
+  --blue-700: #123A63;
+  --blue-600: #1D4ED8;
+  --blue-500: #2563EB;
+  --blue-400: #3B82F6;
+  --blue-300: #60A5FA;
+  --blue-200: #93C5FD;
+  --blue-100: #BAE6FD;
+
+  --accent: var(--blue-400);
+  --accent-strong: var(--blue-500);
+  --accent-soft: rgba(59, 130, 246, 0.14);
+  --accent-glow: rgba(59, 130, 246, 0.35);
+
+  /* ---- Semantic ---- */
+  --success: #34D399;
+  --success-soft: rgba(52, 211, 153, 0.14);
+  --warning: #FBBF24;
+  --warning-soft: rgba(251, 191, 36, 0.14);
+  --danger: #F87171;
+  --danger-soft: rgba(248, 113, 113, 0.14);
+  --info: var(--blue-300);
+  --info-soft: rgba(96, 165, 250, 0.14);
+
+  /* ---- Shadows ---- */
+  --shadow-sm: 0 1px 2px rgba(2, 8, 20, 0.4);
+  --shadow-md: 0 6px 20px rgba(2, 8, 20, 0.45);
+  --shadow-lg: 0 16px 48px rgba(2, 8, 20, 0.55);
+  --shadow-glow-blue: 0 0 0 1px rgba(59,130,246,0.25), 0 8px 30px rgba(37, 99, 235, 0.25);
+
+  /* ---- Radii ---- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+  --radius-pill: 999px;
+
+  /* ---- Motion ---- */
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 140ms;
+  --duration-base: 220ms;
+  --duration-slow: 380ms;
+
+  /* ---- Layout ---- */
+  --nav-height: 64px;
+  --sidebar-w-expanded: 248px;
+  --sidebar-w-collapsed: 76px;
+
+  /* ---- Type ---- */
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}

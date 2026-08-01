@@ -1,0 +1,67 @@
+.stat-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+@media (max-width: 720px) { .stat-grid-4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 460px) { .stat-grid-4 { grid-template-columns: 1fr; } }
+
+.applications-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+  background: var(--bg-sunken);
+  color: var(--text-muted);
+  flex: 1;
+  min-width: 220px;
+  max-width: 360px;
+  transition: border-color var(--duration-fast), background var(--duration-fast);
+}
+.search-input:focus-within { border-color: var(--blue-400); box-shadow: 0 0 0 3px rgba(59,130,246,0.16); background: var(--bg-elevated); }
+.search-input input { background: transparent; border: none; outline: none; color: var(--text-primary); font-size: 13.5px; flex: 1; }
+.search-input input::placeholder { color: var(--text-faint); }
+
+.app-cell-company { display: flex; align-items: center; gap: 12px; }
+.app-cell-logo {
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface-2);
+  color: var(--blue-300);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12.5px;
+  flex-shrink: 0;
+}
+.app-cell-name { font-size: 13.5px; font-weight: 600; color: var(--text-primary); }
+
+.app-row-actions { opacity: 0; transition: opacity var(--duration-fast); }
+tr:hover .app-row-actions { opacity: 1; }
+
+.icon-action {
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+  color: var(--text-muted);
+  transition: background var(--duration-fast), color var(--duration-fast);
+}
+.icon-action:hover { background: var(--surface-2); color: var(--text-primary); }
+.icon-action.danger:hover { background: var(--danger-soft); color: var(--danger); }
+
+@media (max-width: 640px) {
+  .applications-toolbar { flex-direction: column; align-items: stretch; }
+  .search-input { max-width: none; }
+}

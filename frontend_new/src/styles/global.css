@@ -1,0 +1,23 @@
+@import './variables.css';
+@import './reset.css';
+@import './typography.css';
+@import './utilities.css';
+@import './toast.css';
+
+.app-shell {
+  min-height: 100%;
+  background:
+    radial-gradient(1200px 600px at 12% -10%, rgba(29, 78, 216, 0.16), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(59, 130, 246, 0.10), transparent 55%),
+    var(--bg-app);
+}
+
+.container-page {
+  padding: 28px 32px 64px;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  .container-page { padding: 18px 16px 48px; }
+}
