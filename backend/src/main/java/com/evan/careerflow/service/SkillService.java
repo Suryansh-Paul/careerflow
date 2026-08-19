@@ -20,6 +20,9 @@ public class SkillService {
     }
 
 
+
+
+
     public List<Skill> getAllSkills(){
 
         return skillRepo.findAll();
@@ -27,12 +30,18 @@ public class SkillService {
     }
 
 
+
+
+
     public Skill getSkillById(int id){
 
         return skillRepo.findById(id)
-                .orElseThrow();
+                .orElse(null);
 
     }
+
+
+
 
 
     public Skill createSkill(Skill skill){
@@ -42,11 +51,42 @@ public class SkillService {
     }
 
 
-    public List<Skill> searchSkills(String keyword){
 
-        return skillRepo.searchSkills(keyword);
+
+
+    public Skill updateSkill(int id, Skill skill){
+
+
+        Skill existingSkill =
+                skillRepo.findById(id)
+                        .orElse(null);
+
+
+
+        if(existingSkill != null){
+
+
+            existingSkill.setName(
+                    skill.getName()
+            );
+
+
+            existingSkill.setCategory(
+                    skill.getCategory()
+            );
+
+
+            return skillRepo.save(existingSkill);
+
+        }
+
+
+        return null;
 
     }
+
+
+
 
 
     public void deleteSkill(int id){

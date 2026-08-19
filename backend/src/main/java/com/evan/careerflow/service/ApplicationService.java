@@ -20,6 +20,7 @@ public class ApplicationService {
     }
 
 
+
     public List<Application> getAllApplications(){
 
         return applicationRepo.findAll();
@@ -27,12 +28,17 @@ public class ApplicationService {
     }
 
 
+
+
     public Application getApplicationById(int id){
 
         return applicationRepo.findById(id)
-                .orElseThrow();
+                .orElse(null);
 
     }
+
+
+
 
 
     public Application createApplication(Application application){
@@ -40,6 +46,55 @@ public class ApplicationService {
         return applicationRepo.save(application);
 
     }
+
+
+
+
+
+    public Application updateApplication(int id, Application application){
+
+
+        Application existingApplication =
+                applicationRepo.findById(id)
+                        .orElse(null);
+
+
+
+        if(existingApplication != null){
+
+
+            existingApplication.setCandidate(
+                    application.getCandidate()
+            );
+
+
+            existingApplication.setJob(
+                    application.getJob()
+            );
+
+
+            existingApplication.setStatus(
+                    application.getStatus()
+            );
+
+
+            existingApplication.setNotes(
+                    application.getNotes()
+            );
+
+
+
+            return applicationRepo.save(existingApplication);
+
+        }
+
+
+        return null;
+
+    }
+
+
+
 
 
     public void deleteApplication(int id){

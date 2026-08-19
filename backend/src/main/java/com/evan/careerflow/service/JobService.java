@@ -20,6 +20,8 @@ public class JobService {
     }
 
 
+
+
     public List<Job> getAllJobs(){
 
         return jobRepo.findAll();
@@ -27,12 +29,18 @@ public class JobService {
     }
 
 
+
+
+
     public Job getJobById(int id){
 
         return jobRepo.findById(id)
-                .orElseThrow();
+                .orElse(null);
 
     }
+
+
+
 
 
     public Job createJob(Job job){
@@ -42,11 +50,45 @@ public class JobService {
     }
 
 
-    public List<Job> searchJobs(String keyword){
 
-        return jobRepo.searchJobs(keyword);
+
+
+
+    public Job updateJob(int id, Job job){
+
+
+        Job existingJob = jobRepo.findById(id)
+                .orElse(null);
+
+
+
+        if(existingJob != null){
+
+
+            existingJob.setTitle(job.getTitle());
+
+            existingJob.setDescription(job.getDescription());
+
+            existingJob.setLocation(job.getLocation());
+
+            existingJob.setJobType(job.getJobType());
+
+            existingJob.setCompany(job.getCompany());
+
+
+            return jobRepo.save(existingJob);
+
+        }
+
+
+        return null;
 
     }
+
+
+
+
+
 
 
     public void deleteJob(int id){
@@ -54,5 +96,18 @@ public class JobService {
         jobRepo.deleteById(id);
 
     }
+
+
+
+
+
+
+
+    public List<Job> searchJobs(String keyword){
+
+        return jobRepo.searchJobs(keyword);
+
+    }
+
 
 }

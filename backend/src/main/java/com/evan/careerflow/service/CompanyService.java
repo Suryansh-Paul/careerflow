@@ -20,6 +20,7 @@ public class CompanyService {
     }
 
 
+
     public List<Company> getAllCompanies(){
 
         return companyRepo.findAll();
@@ -27,12 +28,17 @@ public class CompanyService {
     }
 
 
+
+
     public Company getCompanyById(int id){
 
         return companyRepo.findById(id)
-                .orElseThrow();
+                .orElse(null);
 
     }
+
+
+
 
 
     public Company createCompany(Company company){
@@ -40,6 +46,59 @@ public class CompanyService {
         return companyRepo.save(company);
 
     }
+
+
+
+
+
+    public Company updateCompany(int id, Company company){
+
+
+        Company existingCompany =
+                companyRepo.findById(id)
+                        .orElse(null);
+
+
+
+        if(existingCompany != null){
+
+
+            existingCompany.setName(
+                    company.getName()
+            );
+
+
+            existingCompany.setWebsite(
+                    company.getWebsite()
+            );
+
+
+            existingCompany.setIndustry(
+                    company.getIndustry()
+            );
+
+
+            existingCompany.setLocation(
+                    company.getLocation()
+            );
+
+
+            existingCompany.setOwner(
+                    company.getOwner()
+            );
+
+
+            return companyRepo.save(existingCompany);
+
+        }
+
+
+        return null;
+
+    }
+
+
+
 
 
     public void deleteCompany(int id){
