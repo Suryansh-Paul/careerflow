@@ -1,73 +1,113 @@
 package com.evan.careerflow.service;
 
-
+import com.evan.careerflow.dtos.UserRequest;
+import com.evan.careerflow.dtos.UserResponse;
 import com.evan.careerflow.models.User;
 import com.evan.careerflow.repo.UserRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 public class UserService {
 
-
     private final UserRepo userRepo;
 
-
-    public UserService(UserRepo userRepo){
-
+    public UserService(UserRepo userRepo) {
         this.userRepo = userRepo;
-
     }
 
 
+    // GET all users
+    public List<UserResponse> getAllUsers() {
 
-    public List<User> getAllUsers(){
-
-        return userRepo.findAll();
-
+        return userRepo.findAll()
+                .stream()
+                .map(this::convertToResponse)
+                .toList();
     }
 
 
+    // GET user by ID
+    public UserResponse getUserById(int id) {
 
-    public User getUserById(int id){
+        User user = userRepo.findById(id).orElse(null);
 
-        return userRepo.findById(id)
-                .orElseThrow();
+        if (user == null) {
+            return null;
+        }
 
+        return convertToResponse(user);
     }
 
 
+    // POST user
+    public UserResponse createUser(UserRequest request) {
 
-    public User createUser(User user){
+        User user = new User();
 
-        return userRepo.save(user);
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setRole(request.getRole());
 
+        // Server controlled
+        user.setEnabled(true);
+
+        User savedUser = userRepo.save(user);
+
+        return convertToResponse(savedUser);
     }
 
 
+    // PUT user
+    public UserResponse updateUser(int id, UserRequest request) {
 
-    public User updateUser(int id, User user){
+        User user = userRepo.findById(id).orElse(null);
 
-        User existingUser = userRepo.findById(id)
-                .orElseThrow();
+        if (user == null) {
+            return null;
+        }
 
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setRole(request.getRole());
 
-        existingUser.setName(user.getName());
-        existingUser.setEmail(user.getEmail());
+        User updatedUser = userRepo.save(user);
 
-
-        return userRepo.save(existingUser);
-
+        return convertToResponse(updatedUser);
     }
 
 
+    // DELETE user
+    public boolean deleteUser(int id) {
 
-    public void deleteUser(int id){
+        User user = userRepo.findById(id).orElse(null);
 
-        userRepo.deleteById(id);
+        if (user == null) {
+            return false;
+        }
 
+        userRepo.delete(user);
+
+        return true;
     }
 
+
+    // Entity -> Response DTO
+    private UserResponse convertToResponse(User user) {
+
+        UserResponse response = new UserResponse();
+
+        response.setId(user.getId());
+        response.setName(user.getName());
+        response.setEmail(user.getEmail());
+        response.setEnabled(user.isEnabled());
+        response.setRole(user.getRole());
+        response.setCreatedAt(user.getCreatedAt());
+        response.setUpdatedAt(user.getUpdatedAt());
+
+        return response;
+    }
 }

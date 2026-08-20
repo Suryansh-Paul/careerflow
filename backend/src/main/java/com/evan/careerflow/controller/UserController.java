@@ -1,7 +1,7 @@
 package com.evan.careerflow.controller;
 
-
-import com.evan.careerflow.models.User;
+import com.evan.careerflow.dtos.UserRequest;
+import com.evan.careerflow.dtos.UserResponse;
 import com.evan.careerflow.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,24 +9,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @CrossOrigin
 @RequestMapping("/api")
 public class UserController {
 
-
     private final UserService userService;
-
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
 
-
+    // GET all users
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
 
         return new ResponseEntity<>(
                 userService.getAllUsers(),
@@ -35,16 +32,14 @@ public class UserController {
     }
 
 
-
+    // GET user by ID
     @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUserById(
-            @PathVariable int id){
+    public ResponseEntity<UserResponse> getUserById(
+            @PathVariable int id) {
 
+        UserResponse user = userService.getUserById(id);
 
-        User user = userService.getUserById(id);
-
-
-        if(user != null){
+        if (user != null) {
 
             return new ResponseEntity<>(
                     user,
@@ -52,33 +47,28 @@ public class UserController {
             );
         }
 
-
         return new ResponseEntity<>(
                 HttpStatus.NOT_FOUND
         );
     }
 
 
-
-
+    // POST user
     @PostMapping("/user")
     public ResponseEntity<?> createUser(
-            @RequestBody User user){
+            @RequestBody UserRequest request) {
 
+        try {
 
-        try{
-
-            User savedUser =
-                    userService.createUser(user);
-
+            UserResponse savedUser =
+                    userService.createUser(request);
 
             return new ResponseEntity<>(
                     savedUser,
                     HttpStatus.CREATED
             );
 
-
-        }catch(Exception e){
+        } catch (Exception e) {
 
             return new ResponseEntity<>(
                     e.getMessage(),
@@ -88,20 +78,16 @@ public class UserController {
     }
 
 
-
-
+    // PUT user
     @PutMapping("/user/{id}")
     public ResponseEntity<?> updateUser(
             @PathVariable int id,
-            @RequestBody User user){
+            @RequestBody UserRequest request) {
 
+        UserResponse updatedUser =
+                userService.updateUser(id, request);
 
-        User updatedUser =
-                userService.updateUser(id,user);
-
-
-
-        if(updatedUser != null){
+        if (updatedUser != null) {
 
             return new ResponseEntity<>(
                     updatedUser,
@@ -109,30 +95,22 @@ public class UserController {
             );
         }
 
-
         return new ResponseEntity<>(
                 "User not found",
-                HttpStatus.BAD_REQUEST
+                HttpStatus.NOT_FOUND
         );
     }
 
 
-
-
-
+    // DELETE user
     @DeleteMapping("/user/{id}")
     public ResponseEntity<String> deleteUser(
-            @PathVariable int id){
+            @PathVariable int id) {
 
+        boolean deleted =
+                userService.deleteUser(id);
 
-        User user =
-                userService.getUserById(id);
-
-
-        if(user != null){
-
-            userService.deleteUser(id);
-
+        if (deleted) {
 
             return new ResponseEntity<>(
                     "User deleted successfully",
@@ -140,11 +118,9 @@ public class UserController {
             );
         }
 
-
         return new ResponseEntity<>(
                 "User not found",
                 HttpStatus.NOT_FOUND
         );
     }
-
 }
