@@ -1,113 +1,104 @@
 package com.evan.careerflow.service;
 
-
+import com.evan.careerflow.dtos.JobRequest;
+import com.evan.careerflow.dtos.JobResponse;
+import com.evan.careerflow.models.Company;
 import com.evan.careerflow.models.Job;
+import com.evan.careerflow.repo.CompanyRepo;
 import com.evan.careerflow.repo.JobRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 @Service
 public class JobService {
 
-
     private final JobRepo jobRepo;
+    private final CompanyRepo companyRepo;
 
-
-    public JobService(JobRepo jobRepo) {
+    public JobService(JobRepo jobRepo, CompanyRepo companyRepo) {
         this.jobRepo = jobRepo;
+        this.companyRepo = companyRepo;
     }
 
-
-
-
-    public List<Job> getAllJobs(){
-
-        return jobRepo.findAll();
-
+    public List<JobResponse> getAllJobs() {
+        return jobRepo.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
-
-
-
-
-    public Job getJobById(int id){
-
-        return jobRepo.findById(id)
-                .orElse(null);
-
+    public JobResponse getJobById(int id) {
+        Job job = jobRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Job not found with ID: " + id));
+        return mapToResponse(job);
     }
 
+    public JobResponse createJob(JobRequest request) {
+        Company company = companyRepo.findById(request.getCompanyId())
+                .orElseThrow(() -> new EntityNotFoundException("Company not found with ID: " + request.getCompanyId()));
 
+        Job job = new Job();
+        job.setTitle(request.getTitle());
+        job.setDescription(request.getDescription());
+        job.setLocation(request.getLocation());
+        job.setJobType(request.getJobType());
+        job.setCompany(company);
 
+        Job savedJob = jobRepo.save(job);
 
-
-    public Job createJob(Job job){
-
-        return jobRepo.save(job);
-
+        return mapToResponse(savedJob);
     }
 
-
-
-
-
-
-    public Job updateJob(int id, Job job){
-
-
+    public JobResponse updateJob(int id, JobRequest request) {
         Job existingJob = jobRepo.findById(id)
-                .orElse(null);
+                .orElseThrow(() -> new EntityNotFoundException("Job not found with ID: " + id));
 
-
-
-        if(existingJob != null){
-
-
-            existingJob.setTitle(job.getTitle());
-
-            existingJob.setDescription(job.getDescription());
-
-            existingJob.setLocation(job.getLocation());
-
-            existingJob.setJobType(job.getJobType());
-
-            existingJob.setCompany(job.getCompany());
-
-
-            return jobRepo.save(existingJob);
-
+        if (!existingJob.getCompany().getId().equals(request.getCompanyId())) {
+            Company newCompany = companyRepo.findById(request.getCompanyId())
+                    .orElseThrow(() -> new EntityNotFoundException("Company not found with ID: " + request.getCompanyId()));
+            existingJob.setCompany(newCompany);
         }
 
+        existingJob.setTitle(request.getTitle());
+        existingJob.setDescription(request.getDescription());
+        existingJob.setLocation(request.getLocation());
+        existingJob.setJobType(request.getJobType());
 
-        return null;
+        Job updatedJob = jobRepo.save(existingJob);
 
+        return mapToResponse(updatedJob);
     }
 
-
-
-
-
-
-
-    public void deleteJob(int id){
-
+    public void deleteJob(int id) {
+        if (!jobRepo.existsById(id)) {
+            throw new EntityNotFoundException("Job not found with ID: " + id);
+        }
         jobRepo.deleteById(id);
-
     }
 
-
-
-
-
-
-
-    public List<Job> searchJobs(String keyword){
-
-        return jobRepo.searchJobs(keyword);
-
+    public List<JobResponse> searchJobs(String keyword) {
+        return jobRepo.searchJobs(keyword)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
+    private JobResponse mapToResponse(Job job) {
+        JobResponse response = new JobResponse();
+        response.setId(job.getId());
+        response.setTitle(job.getTitle());
+        response.setDescription(job.getDescription());
+        response.setLocation(job.getLocation());
+        response.setJobType(job.getJobType());
+        response.setCreatedAt(job.getCreatedAt());
 
+        if (job.getCompany() != null) {
+            response.setCompanyId(job.getCompany().getId());
+        }
+
+        return response;
+    }
 }
