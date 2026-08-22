@@ -9,11 +9,11 @@ import java.util.List;
 
 
 @Entity
+@Table(name = "user")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class User {
 
 
@@ -34,7 +34,7 @@ public class User {
     private String password;
 
 
-    private boolean enabled = true;
+    private boolean enabled = true; // Server controlled
 
 
     @Enumerated(EnumType.STRING)
@@ -71,18 +71,14 @@ public class User {
 
     @PrePersist
     public void onCreate(){
-
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-
     }
 
 
     @PreUpdate
     public void onUpdate(){
-
         updatedAt = LocalDateTime.now();
-
     }
 
 }
