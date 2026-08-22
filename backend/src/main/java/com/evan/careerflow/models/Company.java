@@ -8,11 +8,11 @@ import java.util.List;
 
 
 @Entity
+@Table(name = "company") // Standardizing singular table name
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Company{
 
 

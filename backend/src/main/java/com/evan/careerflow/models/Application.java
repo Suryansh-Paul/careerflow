@@ -9,11 +9,11 @@ import java.util.List;
 
 
 @Entity
+@Table(name = "application") // Standardizing singular table name
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Application {
 
 

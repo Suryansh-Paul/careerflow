@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 
 
 @Entity
+@Table(name = "resume") // Standardizing singular table name
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Resume {
 
 

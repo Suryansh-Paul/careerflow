@@ -7,11 +7,12 @@ import lombok.*;
 import java.util.List;
 
 
+@Entity
+@Table(name = "skill") // Standardizing singular table name
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 public class Skill {
 
 
