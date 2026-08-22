@@ -1,106 +1,107 @@
 package com.evan.careerflow.service;
 
-
+import com.evan.careerflow.dtos.ApplicationRequest;
+import com.evan.careerflow.dtos.ApplicationResponse;
 import com.evan.careerflow.models.Application;
+import com.evan.careerflow.models.Job;
+import com.evan.careerflow.models.User;
 import com.evan.careerflow.repo.ApplicationRepo;
+import com.evan.careerflow.repo.JobRepo;
+import com.evan.careerflow.repo.UserRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 @Service
 public class ApplicationService {
 
-
     private final ApplicationRepo applicationRepo;
+    private final UserRepo userRepo;
+    private final JobRepo jobRepo;
 
-
-    public ApplicationService(ApplicationRepo applicationRepo) {
+    public ApplicationService(ApplicationRepo applicationRepo, UserRepo userRepo, JobRepo jobRepo) {
         this.applicationRepo = applicationRepo;
+        this.userRepo = userRepo;
+        this.jobRepo = jobRepo;
     }
 
-
-
-    public List<Application> getAllApplications(){
-
-        return applicationRepo.findAll();
-
+    public List<ApplicationResponse> getAllApplications(){
+        return applicationRepo.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
-
-
-
-    public Application getApplicationById(int id){
-
-        return applicationRepo.findById(id)
-                .orElse(null);
-
+    public ApplicationResponse getApplicationById(int id){
+        Application application = applicationRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Application not found with ID: " + id));
+        return mapToResponse(application);
     }
 
+    public ApplicationResponse createApplication(ApplicationRequest request){
+        User candidate = userRepo.findById(request.getCandidateId())
+                .orElseThrow(() -> new EntityNotFoundException("Candidate not found with ID: " + request.getCandidateId()));
 
+        Job job = jobRepo.findById(request.getJobId())
+                .orElseThrow(() -> new EntityNotFoundException("Job not found with ID: " + request.getJobId()));
 
+        Application application = new Application();
+        application.setCandidate(candidate);
+        application.setJob(job);
+        application.setStatus(request.getStatus());
+        application.setNotes(request.getNotes());
 
-
-    public Application createApplication(Application application){
-
-        return applicationRepo.save(application);
-
+        Application savedApplication = applicationRepo.save(application);
+        return mapToResponse(savedApplication);
     }
 
+    public ApplicationResponse updateApplication(int id, ApplicationRequest request){
+        Application existingApplication = applicationRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Application not found with ID: " + id));
 
-
-
-
-    public Application updateApplication(int id, Application application){
-
-
-        Application existingApplication =
-                applicationRepo.findById(id)
-                        .orElse(null);
-
-
-
-        if(existingApplication != null){
-
-
-            existingApplication.setCandidate(
-                    application.getCandidate()
-            );
-
-
-            existingApplication.setJob(
-                    application.getJob()
-            );
-
-
-            existingApplication.setStatus(
-                    application.getStatus()
-            );
-
-
-            existingApplication.setNotes(
-                    application.getNotes()
-            );
-
-
-
-            return applicationRepo.save(existingApplication);
-
+        if (!existingApplication.getCandidate().getId().equals(request.getCandidateId())) {
+            User newCandidate = userRepo.findById(request.getCandidateId())
+                    .orElseThrow(() -> new EntityNotFoundException("Candidate not found with ID: " + request.getCandidateId()));
+            existingApplication.setCandidate(newCandidate);
         }
 
+        if (!existingApplication.getJob().getId().equals(request.getJobId())) {
+            Job newJob = jobRepo.findById(request.getJobId())
+                    .orElseThrow(() -> new EntityNotFoundException("Job not found with ID: " + request.getJobId()));
+            existingApplication.setJob(newJob);
+        }
 
-        return null;
+        existingApplication.setStatus(request.getStatus());
+        existingApplication.setNotes(request.getNotes());
 
+        Application updatedApplication = applicationRepo.save(existingApplication);
+        return mapToResponse(updatedApplication);
     }
-
-
-
-
 
     public void deleteApplication(int id){
-
+        if (!applicationRepo.existsById(id)) {
+            throw new EntityNotFoundException("Application not found with ID: " + id);
+        }
         applicationRepo.deleteById(id);
-
     }
 
+    private ApplicationResponse mapToResponse(Application application) {
+        ApplicationResponse response = new ApplicationResponse();
+        response.setId(application.getId());
+        response.setStatus(application.getStatus());
+        response.setAppliedAt(application.getAppliedAt());
+        response.setNotes(application.getNotes());
+
+        if (application.getCandidate() != null) {
+            response.setCandidateId(application.getCandidate().getId());
+        }
+
+        if (application.getJob() != null) {
+            response.setJobId(application.getJob().getId());
+        }
+
+        return response;
+    }
 }
