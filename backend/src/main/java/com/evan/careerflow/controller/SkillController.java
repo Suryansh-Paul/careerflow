@@ -1,7 +1,7 @@
 package com.evan.careerflow.controller;
 
-
-import com.evan.careerflow.models.Skill;
+import com.evan.careerflow.dtos.SkillRequest;
+import com.evan.careerflow.dtos.SkillResponse;
 import com.evan.careerflow.service.SkillService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,166 +9,62 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @CrossOrigin
 @RequestMapping("/api")
 public class SkillController {
 
-
     private final SkillService skillService;
-
 
     public SkillController(SkillService skillService) {
         this.skillService = skillService;
     }
 
-
-
     @GetMapping("/skills")
-    public ResponseEntity<List<Skill>> getAllSkills(){
-
-
+    public ResponseEntity<List<SkillResponse>> getAllSkills(){
         return new ResponseEntity<>(
                 skillService.getAllSkills(),
                 HttpStatus.OK
         );
     }
 
-
-
-
     @GetMapping("/skill/{id}")
-    public ResponseEntity<Skill> getSkillById(
-            @PathVariable int id){
-
-
-        Skill skill =
-                skillService.getSkillById(id);
-
-
-
-        if(skill != null){
-
-            return new ResponseEntity<>(
-                    skill,
-                    HttpStatus.OK
-            );
-        }
-
-
-
+    public ResponseEntity<SkillResponse> getSkillById(@PathVariable int id){
         return new ResponseEntity<>(
-                HttpStatus.NOT_FOUND
+                skillService.getSkillById(id),
+                HttpStatus.OK
         );
     }
-
-
-
-
 
     @PostMapping("/skill")
-    public ResponseEntity<?> createSkill(
-            @RequestBody Skill skill){
-
-
-        try{
-
-
-            Skill savedSkill =
-                    skillService.createSkill(skill);
-
-
-
-            return new ResponseEntity<>(
-                    savedSkill,
-                    HttpStatus.CREATED
-            );
-
-
-
-        }catch(Exception e){
-
-
-            return new ResponseEntity<>(
-                    e.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
-        }
+    public ResponseEntity<SkillResponse> createSkill(@RequestBody SkillRequest request){
+        SkillResponse savedSkill = skillService.createSkill(request);
+        return new ResponseEntity<>(
+                savedSkill,
+                HttpStatus.CREATED
+        );
     }
 
-
-
-
-
     @PutMapping("/skill/{id}")
-    public ResponseEntity<?> updateSkill(
-            @PathVariable int id,
-            @RequestBody Skill skill){
-
-
-
-        Skill updatedSkill =
-                skillService.updateSkill(id,skill);
-
-
-
-        if(updatedSkill != null){
-
-            return new ResponseEntity<>(
-                    updatedSkill,
-                    HttpStatus.OK
-            );
-        }
-
-
-
+    public ResponseEntity<SkillResponse> updateSkill(@PathVariable int id, @RequestBody SkillRequest request){
+        SkillResponse updatedSkill = skillService.updateSkill(id, request);
         return new ResponseEntity<>(
-                "Skill not found",
-                HttpStatus.BAD_REQUEST
+                updatedSkill,
+                HttpStatus.OK
         );
-
     }
 
     @GetMapping("/test")
     public String test(){
-
         return "Skill controller working";
     }
 
-
-
     @DeleteMapping("/skill/{id}")
-    public ResponseEntity<String> deleteSkill(
-            @PathVariable int id){
-
-
-
-        Skill skill =
-                skillService.getSkillById(id);
-
-
-
-        if(skill != null){
-
-
-            skillService.deleteSkill(id);
-
-
-
-            return new ResponseEntity<>(
-                    "Skill deleted successfully",
-                    HttpStatus.OK
-            );
-        }
-
-
-
+    public ResponseEntity<String> deleteSkill(@PathVariable int id){
+        skillService.deleteSkill(id);
         return new ResponseEntity<>(
-                "Skill not found",
-                HttpStatus.NOT_FOUND
+                "Skill deleted successfully",
+                HttpStatus.OK
         );
-
     }
-
 }
