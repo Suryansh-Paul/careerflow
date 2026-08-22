@@ -1,7 +1,7 @@
 package com.evan.careerflow.controller;
 
-
-import com.evan.careerflow.models.Interview;
+import com.evan.careerflow.dtos.InterviewRequest;
+import com.evan.careerflow.dtos.InterviewResponse;
 import com.evan.careerflow.service.InterviewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,175 +9,57 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @CrossOrigin
 @RequestMapping("/api")
 public class InterviewController {
 
-
     private final InterviewService interviewService;
-
 
     public InterviewController(InterviewService interviewService) {
         this.interviewService = interviewService;
     }
 
-
-
-
-
     @GetMapping("/interviews")
-    public ResponseEntity<List<Interview>> getAllInterviews(){
-
-
+    public ResponseEntity<List<InterviewResponse>> getAllInterviews(){
         return new ResponseEntity<>(
                 interviewService.getAllInterviews(),
                 HttpStatus.OK
         );
-
     }
-
-
-
-
 
     @GetMapping("/interview/{id}")
-    public ResponseEntity<Interview> getInterviewById(
-            @PathVariable int id){
-
-
-
-        Interview interview =
-                interviewService.getInterviewById(id);
-
-
-
-        if(interview != null){
-
-            return new ResponseEntity<>(
-                    interview,
-                    HttpStatus.OK
-            );
-        }
-
-
-
-
+    public ResponseEntity<InterviewResponse> getInterviewById(@PathVariable int id){
         return new ResponseEntity<>(
-                HttpStatus.NOT_FOUND
+                interviewService.getInterviewById(id),
+                HttpStatus.OK
         );
-
     }
-
-
-
-
 
     @PostMapping("/interview")
-    public ResponseEntity<?> createInterview(
-            @RequestBody Interview interview){
-
-
-        try{
-
-
-            Interview savedInterview =
-                    interviewService.createInterview(interview);
-
-
-
-            return new ResponseEntity<>(
-                    savedInterview,
-                    HttpStatus.CREATED
-            );
-
-
-
-        }catch(Exception e){
-
-
-            return new ResponseEntity<>(
-                    e.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
-        }
-
+    public ResponseEntity<InterviewResponse> createInterview(@RequestBody InterviewRequest request){
+        InterviewResponse savedInterview = interviewService.createInterview(request);
+        return new ResponseEntity<>(
+                savedInterview,
+                HttpStatus.CREATED
+        );
     }
-
-
-
-
 
     @PutMapping("/interview/{id}")
-    public ResponseEntity<?> updateInterview(
-            @PathVariable int id,
-            @RequestBody Interview interview){
-
-
-
-        Interview updatedInterview =
-                interviewService.updateInterview(id,interview);
-
-
-
-
-        if(updatedInterview != null){
-
-
-            return new ResponseEntity<>(
-                    updatedInterview,
-                    HttpStatus.OK
-            );
-
-        }
-
-
-
+    public ResponseEntity<InterviewResponse> updateInterview(@PathVariable int id, @RequestBody InterviewRequest request){
+        InterviewResponse updatedInterview = interviewService.updateInterview(id, request);
         return new ResponseEntity<>(
-                "Interview not found",
-                HttpStatus.BAD_REQUEST
+                updatedInterview,
+                HttpStatus.OK
         );
-
     }
-
-
-
-
 
     @DeleteMapping("/interview/{id}")
-    public ResponseEntity<String> deleteInterview(
-            @PathVariable int id){
-
-
-
-        Interview interview =
-                interviewService.getInterviewById(id);
-
-
-
-
-        if(interview != null){
-
-
-            interviewService.deleteInterview(id);
-
-
-
-            return new ResponseEntity<>(
-                    "Interview deleted successfully",
-                    HttpStatus.OK
-            );
-
-        }
-
-
-
+    public ResponseEntity<String> deleteInterview(@PathVariable int id){
+        interviewService.deleteInterview(id);
         return new ResponseEntity<>(
-                "Interview not found",
-                HttpStatus.NOT_FOUND
+                "Interview deleted successfully",
+                HttpStatus.OK
         );
-
     }
-
 }
