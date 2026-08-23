@@ -3,6 +3,7 @@ package com.evan.careerflow.controller;
 import com.evan.careerflow.dtos.SkillRequest;
 import com.evan.careerflow.dtos.SkillResponse;
 import com.evan.careerflow.service.SkillService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class SkillController {
     }
 
     @PostMapping("/skill")
-    public ResponseEntity<SkillResponse> createSkill(@RequestBody SkillRequest request){
+    public ResponseEntity<SkillResponse> createSkill(@Valid @RequestBody SkillRequest request){
         SkillResponse savedSkill = skillService.createSkill(request);
         return new ResponseEntity<>(
                 savedSkill,
@@ -46,7 +47,7 @@ public class SkillController {
     }
 
     @PutMapping("/skill/{id}")
-    public ResponseEntity<SkillResponse> updateSkill(@PathVariable int id, @RequestBody SkillRequest request){
+    public ResponseEntity<SkillResponse> updateSkill(@PathVariable int id, @Valid @RequestBody SkillRequest request){
         SkillResponse updatedSkill = skillService.updateSkill(id, request);
         return new ResponseEntity<>(
                 updatedSkill,
