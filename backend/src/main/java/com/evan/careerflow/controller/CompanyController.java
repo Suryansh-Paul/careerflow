@@ -3,6 +3,7 @@ package com.evan.careerflow.controller;
 import com.evan.careerflow.dtos.CompanyRequest;
 import com.evan.careerflow.dtos.CompanyResponse;
 import com.evan.careerflow.service.CompanyService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +61,7 @@ public class CompanyController {
 
     // POST company
     @PostMapping("/company")
-    public ResponseEntity<?> createCompany(
+    public ResponseEntity<?> createCompany( @Valid
             @RequestBody CompanyRequest request) {
 
         try {
@@ -86,7 +87,7 @@ public class CompanyController {
     // PUT company
     @PutMapping("/company/{id}")
     public ResponseEntity<?> updateCompany(
-            @PathVariable int id,
+            @PathVariable int id, @Valid
             @RequestBody CompanyRequest request) {
 
         try {
