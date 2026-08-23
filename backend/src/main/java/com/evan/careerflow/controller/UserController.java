@@ -3,6 +3,7 @@ package com.evan.careerflow.controller;
 import com.evan.careerflow.dtos.UserRequest;
 import com.evan.careerflow.dtos.UserResponse;
 import com.evan.careerflow.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,7 +56,7 @@ public class UserController {
 
     // POST user
     @PostMapping("/user")
-    public ResponseEntity<?> createUser(
+    public ResponseEntity<?> createUser( @Valid
             @RequestBody UserRequest request) {
 
         try {
@@ -81,7 +82,7 @@ public class UserController {
     // PUT user
     @PutMapping("/user/{id}")
     public ResponseEntity<?> updateUser(
-            @PathVariable int id,
+            @PathVariable int id, @Valid
             @RequestBody UserRequest request) {
 
         UserResponse updatedUser =
