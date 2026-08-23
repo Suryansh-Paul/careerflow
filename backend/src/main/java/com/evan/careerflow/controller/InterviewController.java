@@ -3,6 +3,7 @@ package com.evan.careerflow.controller;
 import com.evan.careerflow.dtos.InterviewRequest;
 import com.evan.careerflow.dtos.InterviewResponse;
 import com.evan.careerflow.service.InterviewService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class InterviewController {
     }
 
     @PostMapping("/interview")
-    public ResponseEntity<InterviewResponse> createInterview(@RequestBody InterviewRequest request){
+    public ResponseEntity<InterviewResponse> createInterview(@Valid @RequestBody InterviewRequest request){
         InterviewResponse savedInterview = interviewService.createInterview(request);
         return new ResponseEntity<>(
                 savedInterview,
@@ -46,7 +47,7 @@ public class InterviewController {
     }
 
     @PutMapping("/interview/{id}")
-    public ResponseEntity<InterviewResponse> updateInterview(@PathVariable int id, @RequestBody InterviewRequest request){
+    public ResponseEntity<InterviewResponse> updateInterview(@PathVariable int id, @Valid @RequestBody InterviewRequest request){
         InterviewResponse updatedInterview = interviewService.updateInterview(id, request);
         return new ResponseEntity<>(
                 updatedInterview,
