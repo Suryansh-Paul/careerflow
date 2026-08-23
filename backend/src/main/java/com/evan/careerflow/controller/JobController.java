@@ -3,6 +3,7 @@ package com.evan.careerflow.controller;
 import com.evan.careerflow.dtos.JobRequest;
 import com.evan.careerflow.dtos.JobResponse;
 import com.evan.careerflow.service.JobService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class JobController {
     }
 
     @PostMapping("/job")
-    public ResponseEntity<JobResponse> createJob(@RequestBody JobRequest request){
+    public ResponseEntity<JobResponse> createJob(@Valid @RequestBody JobRequest request){
         JobResponse savedJob = jobService.createJob(request);
         return new ResponseEntity<>(
                 savedJob,
@@ -46,7 +47,7 @@ public class JobController {
     }
 
     @PutMapping("/job/{id}")
-    public ResponseEntity<JobResponse> updateJob(@PathVariable int id, @RequestBody JobRequest request){
+    public ResponseEntity<JobResponse> updateJob(@PathVariable int id, @Valid @RequestBody JobRequest request){
         JobResponse updatedJob = jobService.updateJob(id, request);
         return new ResponseEntity<>(
                 updatedJob,
