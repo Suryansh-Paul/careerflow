@@ -3,6 +3,7 @@ package com.evan.careerflow.controller;
 import com.evan.careerflow.dtos.ResumeRequest;
 import com.evan.careerflow.dtos.ResumeResponse;
 import com.evan.careerflow.service.ResumeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class ResumeController {
     }
 
     @PostMapping("/resume")
-    public ResponseEntity<ResumeResponse> createResume(@RequestBody ResumeRequest request){
+    public ResponseEntity<ResumeResponse> createResume(@Valid @RequestBody ResumeRequest request){
         ResumeResponse savedResume = resumeService.createResume(request);
         return new ResponseEntity<>(
                 savedResume,
@@ -46,7 +47,7 @@ public class ResumeController {
     }
 
     @PutMapping("/resume/{id}")
-    public ResponseEntity<ResumeResponse> updateResume(@PathVariable int id, @RequestBody ResumeRequest request){
+    public ResponseEntity<ResumeResponse> updateResume(@PathVariable int id, @Valid @RequestBody ResumeRequest request){
         ResumeResponse updatedResume = resumeService.updateResume(id, request);
         return new ResponseEntity<>(
                 updatedResume,
