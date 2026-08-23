@@ -3,6 +3,7 @@ package com.evan.careerflow.controller;
 import com.evan.careerflow.dtos.ApplicationRequest;
 import com.evan.careerflow.dtos.ApplicationResponse;
 import com.evan.careerflow.service.ApplicationService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class ApplicationController {
     }
 
     @PostMapping("/application")
-    public ResponseEntity<ApplicationResponse> createApplication(@RequestBody ApplicationRequest request){
+    public ResponseEntity<ApplicationResponse> createApplication(@Valid @RequestBody ApplicationRequest request){
         ApplicationResponse savedApplication = applicationService.createApplication(request);
         return new ResponseEntity<>(
                 savedApplication,
@@ -46,7 +47,7 @@ public class ApplicationController {
     }
 
     @PutMapping("/application/{id}")
-    public ResponseEntity<ApplicationResponse> updateApplication(@PathVariable int id, @RequestBody ApplicationRequest request){
+    public ResponseEntity<ApplicationResponse> updateApplication(@PathVariable int id, @Valid @RequestBody ApplicationRequest request){
         ApplicationResponse updatedApplication = applicationService.updateApplication(id, request);
         return new ResponseEntity<>(
                 updatedApplication,
