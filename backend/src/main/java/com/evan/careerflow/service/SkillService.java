@@ -2,9 +2,9 @@ package com.evan.careerflow.service;
 
 import com.evan.careerflow.dtos.SkillRequest;
 import com.evan.careerflow.dtos.SkillResponse;
+import com.evan.careerflow.exceptionhandling.ResourceNotFoundException;
 import com.evan.careerflow.models.Skill;
 import com.evan.careerflow.repo.SkillRepo;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class SkillService {
 
     public SkillResponse getSkillById(int id){
         Skill skill = skillRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Skill not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Skill not found with ID: " + id));
         return mapToResponse(skill);
     }
 
@@ -43,7 +43,7 @@ public class SkillService {
 
     public SkillResponse updateSkill(int id, SkillRequest request){
         Skill existingSkill = skillRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Skill not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Skill not found with ID: " + id));
 
         existingSkill.setName(request.getName());
         existingSkill.setCategory(request.getCategory());
@@ -54,16 +54,18 @@ public class SkillService {
 
     public void deleteSkill(int id){
         if (!skillRepo.existsById(id)) {
-            throw new EntityNotFoundException("Skill not found with ID: " + id);
+            throw new ResourceNotFoundException("Skill not found with ID: " + id);
         }
         skillRepo.deleteById(id);
     }
 
     private SkillResponse mapToResponse(Skill skill) {
         SkillResponse response = new SkillResponse();
+
         response.setId(skill.getId());
         response.setName(skill.getName());
         response.setCategory(skill.getCategory());
+
         return response;
     }
 }
