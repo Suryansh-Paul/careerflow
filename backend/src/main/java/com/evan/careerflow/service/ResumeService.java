@@ -2,11 +2,11 @@ package com.evan.careerflow.service;
 
 import com.evan.careerflow.dtos.ResumeRequest;
 import com.evan.careerflow.dtos.ResumeResponse;
+import com.evan.careerflow.exceptionhandling.ResourceNotFoundException;
 import com.evan.careerflow.models.Resume;
 import com.evan.careerflow.models.User;
 import com.evan.careerflow.repo.ResumeRepo;
 import com.evan.careerflow.repo.UserRepo;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,13 +32,13 @@ public class ResumeService {
 
     public ResumeResponse getResumeById(int id){
         Resume resume = resumeRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Resume not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Resume not found with ID: " + id));
         return mapToResponse(resume);
     }
 
     public ResumeResponse createResume(ResumeRequest request){
         User user = userRepo.findById(request.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + request.getUserId()));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + request.getUserId()));
 
         Resume resume = new Resume();
         resume.setFileName(request.getFileName());
@@ -52,12 +52,12 @@ public class ResumeService {
 
     public ResumeResponse updateResume(int id, ResumeRequest request){
         Resume existingResume = resumeRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Resume not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Resume not found with ID: " + id));
 
         if (request.getUserId() != null) {
             if (existingResume.getUser() == null || !existingResume.getUser().getId().equals(request.getUserId())) {
                 User newUser = userRepo.findById(request.getUserId())
-                        .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + request.getUserId()));
+                        .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + request.getUserId()));
                 existingResume.setUser(newUser);
             }
         }
@@ -70,16 +70,16 @@ public class ResumeService {
         return mapToResponse(updatedResume);
     }
 
-
     public void deleteResume(int id){
         if (!resumeRepo.existsById(id)) {
-            throw new EntityNotFoundException("Resume not found with ID: " + id);
+            throw new ResourceNotFoundException("Resume not found with ID: " + id);
         }
         resumeRepo.deleteById(id);
     }
 
     private ResumeResponse mapToResponse(Resume resume) {
         ResumeResponse response = new ResumeResponse();
+
         response.setId(resume.getId());
         response.setFileName(resume.getFileName());
         response.setFileUrl(resume.getFileUrl());
