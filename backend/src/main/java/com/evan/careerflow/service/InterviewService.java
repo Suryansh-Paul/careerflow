@@ -2,11 +2,11 @@ package com.evan.careerflow.service;
 
 import com.evan.careerflow.dtos.InterviewRequest;
 import com.evan.careerflow.dtos.InterviewResponse;
+import com.evan.careerflow.exceptionhandling.ResourceNotFoundException;
 import com.evan.careerflow.models.Application;
 import com.evan.careerflow.models.Interview;
 import com.evan.careerflow.repo.ApplicationRepo;
 import com.evan.careerflow.repo.InterviewRepo;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,13 +32,13 @@ public class InterviewService {
 
     public InterviewResponse getInterviewById(int id){
         Interview interview = interviewRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Interview not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Interview not found with ID: " + id));
         return mapToResponse(interview);
     }
 
     public InterviewResponse createInterview(InterviewRequest request){
         Application application = applicationRepo.findById(request.getApplicationId())
-                .orElseThrow(() -> new EntityNotFoundException("Application not found with ID: " + request.getApplicationId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Application not found with ID: " + request.getApplicationId()));
 
         Interview interview = new Interview();
         interview.setRound(request.getRound());
@@ -54,11 +54,11 @@ public class InterviewService {
 
     public InterviewResponse updateInterview(int id, InterviewRequest request){
         Interview existingInterview = interviewRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Interview not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Interview not found with ID: " + id));
 
         if (!existingInterview.getApplication().getId().equals(request.getApplicationId())) {
             Application newApplication = applicationRepo.findById(request.getApplicationId())
-                    .orElseThrow(() -> new EntityNotFoundException("Application not found with ID: " + request.getApplicationId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Application not found with ID: " + request.getApplicationId()));
             existingInterview.setApplication(newApplication);
         }
 
@@ -74,13 +74,14 @@ public class InterviewService {
 
     public void deleteInterview(int id){
         if (!interviewRepo.existsById(id)) {
-            throw new EntityNotFoundException("Interview not found with ID: " + id);
+            throw new ResourceNotFoundException("Interview not found with ID: " + id);
         }
         interviewRepo.deleteById(id);
     }
 
     private InterviewResponse mapToResponse(Interview interview) {
         InterviewResponse response = new InterviewResponse();
+
         response.setId(interview.getId());
         response.setRound(interview.getRound());
         response.setInterviewDate(interview.getInterviewDate());
