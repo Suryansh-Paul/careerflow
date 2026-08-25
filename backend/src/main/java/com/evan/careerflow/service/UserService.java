@@ -2,6 +2,7 @@ package com.evan.careerflow.service;
 
 import com.evan.careerflow.dtos.UserRequest;
 import com.evan.careerflow.dtos.UserResponse;
+import com.evan.careerflow.exceptionhandling.ResourceNotFoundException;
 import com.evan.careerflow.models.User;
 import com.evan.careerflow.repo.UserRepo;
 import org.springframework.stereotype.Service;
@@ -17,41 +18,27 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
-
-    // GET all users
     public List<UserResponse> getAllUsers() {
-
         return userRepo.findAll()
                 .stream()
                 .map(this::convertToResponse)
                 .toList();
     }
 
-
-    // GET user by ID
     public UserResponse getUserById(int id) {
-
-        User user = userRepo.findById(id).orElse(null);
-
-        if (user == null) {
-            return null;
-        }
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         return convertToResponse(user);
     }
 
-
-    // POST user
     public UserResponse createUser(UserRequest request) {
-
         User user = new User();
 
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
         user.setRole(request.getRole());
-
-        // Server controlled
         user.setEnabled(true);
 
         User savedUser = userRepo.save(user);
@@ -59,15 +46,9 @@ public class UserService {
         return convertToResponse(savedUser);
     }
 
-
-    // PUT user
     public UserResponse updateUser(int id, UserRequest request) {
-
-        User user = userRepo.findById(id).orElse(null);
-
-        if (user == null) {
-            return null;
-        }
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         user.setName(request.getName());
         user.setEmail(request.getEmail());
@@ -79,25 +60,16 @@ public class UserService {
         return convertToResponse(updatedUser);
     }
 
-
-    // DELETE user
     public boolean deleteUser(int id) {
-
-        User user = userRepo.findById(id).orElse(null);
-
-        if (user == null) {
-            return false;
-        }
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         userRepo.delete(user);
 
         return true;
     }
 
-
-    // Entity -> Response DTO
     private UserResponse convertToResponse(User user) {
-
         UserResponse response = new UserResponse();
 
         response.setId(user.getId());
