@@ -2,11 +2,11 @@ package com.evan.careerflow.service;
 
 import com.evan.careerflow.dtos.JobRequest;
 import com.evan.careerflow.dtos.JobResponse;
+import com.evan.careerflow.exceptionhandling.ResourceNotFoundException;
 import com.evan.careerflow.models.Company;
 import com.evan.careerflow.models.Job;
 import com.evan.careerflow.repo.CompanyRepo;
 import com.evan.careerflow.repo.JobRepo;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,13 +32,13 @@ public class JobService {
 
     public JobResponse getJobById(int id) {
         Job job = jobRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Job not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Job not found with ID: " + id));
         return mapToResponse(job);
     }
 
     public JobResponse createJob(JobRequest request) {
         Company company = companyRepo.findById(request.getCompanyId())
-                .orElseThrow(() -> new EntityNotFoundException("Company not found with ID: " + request.getCompanyId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found with ID: " + request.getCompanyId()));
 
         Job job = new Job();
         job.setTitle(request.getTitle());
@@ -54,11 +54,11 @@ public class JobService {
 
     public JobResponse updateJob(int id, JobRequest request) {
         Job existingJob = jobRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Job not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Job not found with ID: " + id));
 
         if (!existingJob.getCompany().getId().equals(request.getCompanyId())) {
             Company newCompany = companyRepo.findById(request.getCompanyId())
-                    .orElseThrow(() -> new EntityNotFoundException("Company not found with ID: " + request.getCompanyId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Company not found with ID: " + request.getCompanyId()));
             existingJob.setCompany(newCompany);
         }
 
@@ -74,7 +74,7 @@ public class JobService {
 
     public void deleteJob(int id) {
         if (!jobRepo.existsById(id)) {
-            throw new EntityNotFoundException("Job not found with ID: " + id);
+            throw new ResourceNotFoundException("Job not found with ID: " + id);
         }
         jobRepo.deleteById(id);
     }
@@ -88,6 +88,7 @@ public class JobService {
 
     private JobResponse mapToResponse(Job job) {
         JobResponse response = new JobResponse();
+
         response.setId(job.getId());
         response.setTitle(job.getTitle());
         response.setDescription(job.getDescription());
