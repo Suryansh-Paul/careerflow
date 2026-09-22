@@ -55,7 +55,7 @@ public class AuthController {
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole()); // Dynamically set the role from the frontend
+        user.setRole(request.getRole());
 
         userRepo.save(user);
 
