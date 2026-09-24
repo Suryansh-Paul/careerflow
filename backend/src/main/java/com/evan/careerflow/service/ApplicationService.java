@@ -2,8 +2,10 @@ package com.evan.careerflow.service;
 
 import com.evan.careerflow.dtos.ApplicationRequest;
 import com.evan.careerflow.dtos.ApplicationResponse;
+import com.evan.careerflow.dtos.ApplicationStatusUpdateRequest;
 import com.evan.careerflow.exceptionhandling.ResourceNotFoundException;
 import com.evan.careerflow.models.Application;
+import com.evan.careerflow.models.ApplicationStatus;
 import com.evan.careerflow.models.Job;
 import com.evan.careerflow.models.User;
 import com.evan.careerflow.repo.ApplicationRepo;
@@ -27,22 +29,39 @@ public class ApplicationService {
         this.jobRepo = jobRepo;
     }
 
-    public List<ApplicationResponse> getAllApplications(){
+    public List<ApplicationResponse> getAllApplications() {
         return applicationRepo.findAll()
                 .stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
 
-    public ApplicationResponse getApplicationById(int id){
+    public ApplicationResponse getApplicationById(int id) {
         Application application = applicationRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Application not found with ID: " + id));
         return mapToResponse(application);
     }
 
-    public ApplicationResponse createApplication(ApplicationRequest request){
-        User candidate = userRepo.findById(request.getCandidateId())
-                .orElseThrow(() -> new ResourceNotFoundException("Candidate not found with ID: " + request.getCandidateId()));
+    public List<ApplicationResponse> getMyApplications(String candidateEmail) {
+        return applicationRepo.findByCandidateEmail(candidateEmail)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<ApplicationResponse> getApplicationsByJob(int jobId) {
+        if (!jobRepo.existsById(jobId)) {
+            throw new ResourceNotFoundException("Job not found with ID: " + jobId);
+        }
+        return applicationRepo.findByJobId(jobId)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public ApplicationResponse createApplication(ApplicationRequest request, String candidateEmail) {
+        User candidate = userRepo.findByEmail(candidateEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("Candidate not found with email: " + candidateEmail));
 
         Job job = jobRepo.findById(request.getJobId())
                 .orElseThrow(() -> new ResourceNotFoundException("Job not found with ID: " + request.getJobId()));
@@ -50,37 +69,27 @@ public class ApplicationService {
         Application application = new Application();
         application.setCandidate(candidate);
         application.setJob(job);
-        application.setStatus(request.getStatus());
+        application.setStatus(ApplicationStatus.APPLIED);
         application.setNotes(request.getNotes());
 
         Application savedApplication = applicationRepo.save(application);
         return mapToResponse(savedApplication);
     }
 
-    public ApplicationResponse updateApplication(int id, ApplicationRequest request){
+    public ApplicationResponse updateApplicationStatus(int id, ApplicationStatusUpdateRequest request) {
         Application existingApplication = applicationRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Application not found with ID: " + id));
 
-        if (!existingApplication.getCandidate().getId().equals(request.getCandidateId())) {
-            User newCandidate = userRepo.findById(request.getCandidateId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Candidate not found with ID: " + request.getCandidateId()));
-            existingApplication.setCandidate(newCandidate);
-        }
-
-        if (!existingApplication.getJob().getId().equals(request.getJobId())) {
-            Job newJob = jobRepo.findById(request.getJobId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Job not found with ID: " + request.getJobId()));
-            existingApplication.setJob(newJob);
-        }
-
         existingApplication.setStatus(request.getStatus());
-        existingApplication.setNotes(request.getNotes());
+        if (request.getNotes() != null) {
+            existingApplication.setNotes(request.getNotes());
+        }
 
         Application updatedApplication = applicationRepo.save(existingApplication);
         return mapToResponse(updatedApplication);
     }
 
-    public void deleteApplication(int id){
+    public void deleteApplication(int id) {
         if (!applicationRepo.existsById(id)) {
             throw new ResourceNotFoundException("Application not found with ID: " + id);
         }
