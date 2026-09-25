@@ -6,8 +6,10 @@ import com.evan.careerflow.service.CompanyService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -17,129 +19,78 @@ public class CompanyController {
 
     private final CompanyService companyService;
 
-    public CompanyController(
-            CompanyService companyService) {
-
+    public CompanyController(CompanyService companyService) {
         this.companyService = companyService;
     }
 
-
-    // GET all companies
+    // Public / Open to all authenticated users
     @GetMapping("/companies")
-    public ResponseEntity<List<CompanyResponse>>
-    getAllCompanies() {
-
+    public ResponseEntity<List<CompanyResponse>> getAllCompanies() {
         return new ResponseEntity<>(
                 companyService.getAllCompanies(),
                 HttpStatus.OK
         );
     }
 
-
-    // GET company by ID
+    // Public / Open to all authenticated users
     @GetMapping("/company/{id}")
-    public ResponseEntity<CompanyResponse>
-    getCompanyById(
-            @PathVariable int id) {
-
-        CompanyResponse company =
-                companyService.getCompanyById(id);
-
-        if (company != null) {
-
-            return new ResponseEntity<>(
-                    company,
-                    HttpStatus.OK
-            );
-        }
-
+    public ResponseEntity<CompanyResponse> getCompanyById(@PathVariable int id) {
         return new ResponseEntity<>(
-                HttpStatus.NOT_FOUND
+                companyService.getCompanyById(id),
+                HttpStatus.OK
         );
     }
 
+    // Employer retrieves their own company profile
+    @PreAuthorize("hasRole('EMPLOYER')")
+    @GetMapping("/company/me")
+    public ResponseEntity<CompanyResponse> getMyCompany(Principal principal) {
+        return new ResponseEntity<>(
+                companyService.getMyCompany(principal.getName()),
+                HttpStatus.OK
+        );
+    }
 
-    // POST company
+    // Only EMPLOYER can create a company; owner bound from JWT token
+    @PreAuthorize("hasRole('EMPLOYER')")
     @PostMapping("/company")
-    public ResponseEntity<?> createCompany( @Valid
-            @RequestBody CompanyRequest request) {
-
-        try {
-
-            CompanyResponse savedCompany =
-                    companyService.createCompany(request);
-
-            return new ResponseEntity<>(
-                    savedCompany,
-                    HttpStatus.CREATED
-            );
-
-        } catch (Exception e) {
-
-            return new ResponseEntity<>(
-                    e.getMessage(),
-                    HttpStatus.BAD_REQUEST
-            );
-        }
+    public ResponseEntity<CompanyResponse> createCompany(
+            @Valid @RequestBody CompanyRequest request,
+            Principal principal
+    ) {
+        CompanyResponse savedCompany = companyService.createCompany(request, principal.getName());
+        return new ResponseEntity<>(
+                savedCompany,
+                HttpStatus.CREATED
+        );
     }
 
-
-    // PUT company
+    // Only owning EMPLOYER can update company details
+    @PreAuthorize("hasRole('EMPLOYER')")
     @PutMapping("/company/{id}")
-    public ResponseEntity<?> updateCompany(
-            @PathVariable int id, @Valid
-            @RequestBody CompanyRequest request) {
-
-        try {
-
-            CompanyResponse updatedCompany =
-                    companyService.updateCompany(
-                            id,
-                            request
-                    );
-
-            if (updatedCompany != null) {
-
-                return new ResponseEntity<>(
-                        updatedCompany,
-                        HttpStatus.OK
-                );
-            }
-
-            return new ResponseEntity<>(
-                    "Company not found",
-                    HttpStatus.NOT_FOUND
-            );
-
-        } catch (Exception e) {
-
-            return new ResponseEntity<>(
-                    e.getMessage(),
-                    HttpStatus.BAD_REQUEST
-            );
-        }
+    public ResponseEntity<CompanyResponse> updateCompany(
+            @PathVariable int id,
+            @Valid @RequestBody CompanyRequest request,
+            Principal principal
+    ) {
+        CompanyResponse updatedCompany = companyService.updateCompany(id, request, principal.getName());
+        return new ResponseEntity<>(
+                updatedCompany,
+                HttpStatus.OK
+        );
     }
 
-
-    // DELETE company
+    // Only owning EMPLOYER can delete company
+    @PreAuthorize("hasRole('EMPLOYER')")
     @DeleteMapping("/company/{id}")
     public ResponseEntity<String> deleteCompany(
-            @PathVariable int id) {
-
-        boolean deleted =
-                companyService.deleteCompany(id);
-
-        if (deleted) {
-
-            return new ResponseEntity<>(
-                    "Company deleted successfully",
-                    HttpStatus.OK
-            );
-        }
-
+            @PathVariable int id,
+            Principal principal
+    ) {
+        companyService.deleteCompany(id, principal.getName());
         return new ResponseEntity<>(
-                "Company not found",
-                HttpStatus.NOT_FOUND
+                "Company deleted successfully",
+                HttpStatus.OK
         );
     }
 }

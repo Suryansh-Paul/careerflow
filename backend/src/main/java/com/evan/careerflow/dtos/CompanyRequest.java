@@ -1,7 +1,6 @@
 package com.evan.careerflow.dtos;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +23,4 @@ public class CompanyRequest {
 
     @NotBlank(message = "Location cannot be empty")
     private String location;
-
-    @NotNull(message = "Owner ID is required")
-    private Integer ownerId;
 }
