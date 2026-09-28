@@ -1,12 +1,10 @@
 package com.evan.careerflow.models;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 
 @Entity
 @Table(name = "user")
@@ -16,48 +14,50 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @Column(nullable = false)
     private String name;
-
 
     @Column(nullable = false, unique = true)
     private String email;
 
-
     @Column(nullable = false)
     private String password;
 
-
     private boolean enabled = true; // Server controlled
-
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-
     private LocalDateTime createdAt;
-
 
     private LocalDateTime updatedAt;
 
+    // --- Profile & Onboarding Fields ---
 
+    @Column(name = "is_onboarded", nullable = false)
+    private boolean isOnboarded = false;
+
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
+    private String headline;
+
+    @Column(columnDefinition = "TEXT")
+    private String bio;
+
+    private String location;
+
+    // --- Relationships ---
 
     @OneToMany(mappedBy = "candidate")
     private List<Application> applications;
 
-
-
-    @OneToMany(mappedBy = "user",
-            cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Resume> resumes;
-
-
 
     @ManyToMany
     @JoinTable(
@@ -67,18 +67,14 @@ public class User {
     )
     private List<Skill> skills;
 
-
-
     @PrePersist
     public void onCreate(){
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
 
-
     @PreUpdate
     public void onUpdate(){
         updatedAt = LocalDateTime.now();
     }
-
 }
