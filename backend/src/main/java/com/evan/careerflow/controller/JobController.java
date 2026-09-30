@@ -4,13 +4,13 @@ import com.evan.careerflow.dtos.JobRequest;
 import com.evan.careerflow.dtos.JobResponse;
 import com.evan.careerflow.service.JobService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -23,15 +23,16 @@ public class JobController {
         this.jobService = jobService;
     }
 
-
     @GetMapping("/jobs")
-    public ResponseEntity<List<JobResponse>> getAllJobs(){
+    public ResponseEntity<Page<JobResponse>> getAllJobs(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
         return new ResponseEntity<>(
-                jobService.getAllJobs(),
+                jobService.getAllJobs(page, size),
                 HttpStatus.OK
         );
     }
-
 
     @GetMapping("/job/{id}")
     public ResponseEntity<JobResponse> getJobById(@PathVariable int id){
@@ -41,19 +42,15 @@ public class JobController {
         );
     }
 
-
     @PreAuthorize("hasRole('EMPLOYER')")
     @PostMapping("/job")
     public ResponseEntity<JobResponse> createJob(@Valid @RequestBody JobRequest request, Principal principal){
-        // principal.getName() contains the logged-in user's email.
-        // We can use this later to verify they own the companyId they provided!
         JobResponse savedJob = jobService.createJob(request);
         return new ResponseEntity<>(
                 savedJob,
                 HttpStatus.CREATED
         );
     }
-
 
     @PreAuthorize("hasRole('EMPLOYER')")
     @PutMapping("/job/{id}")
@@ -65,7 +62,6 @@ public class JobController {
         );
     }
 
-
     @PreAuthorize("hasRole('EMPLOYER')")
     @DeleteMapping("/job/{id}")
     public ResponseEntity<String> deleteJob(@PathVariable int id, Principal principal){
@@ -76,11 +72,14 @@ public class JobController {
         );
     }
 
-
     @GetMapping("/jobs/search")
-    public ResponseEntity<List<JobResponse>> searchJobs(@RequestParam String keyword){
+    public ResponseEntity<Page<JobResponse>> searchJobs(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
         return new ResponseEntity<>(
-                jobService.searchJobs(keyword),
+                jobService.searchJobs(keyword, page, size),
                 HttpStatus.OK
         );
     }

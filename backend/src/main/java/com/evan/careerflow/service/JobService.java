@@ -7,10 +7,10 @@ import com.evan.careerflow.models.Company;
 import com.evan.careerflow.models.Job;
 import com.evan.careerflow.repo.CompanyRepo;
 import com.evan.careerflow.repo.JobRepo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class JobService {
@@ -23,11 +23,9 @@ public class JobService {
         this.companyRepo = companyRepo;
     }
 
-    public List<JobResponse> getAllJobs() {
-        return jobRepo.findAll()
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+    public Page<JobResponse> getAllJobs(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return jobRepo.findAll(pageable).map(this::mapToResponse);
     }
 
     public JobResponse getJobById(int id) {
@@ -79,11 +77,9 @@ public class JobService {
         jobRepo.deleteById(id);
     }
 
-    public List<JobResponse> searchJobs(String keyword) {
-        return jobRepo.searchJobs(keyword)
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+    public Page<JobResponse> searchJobs(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return jobRepo.searchJobs(keyword, pageable).map(this::mapToResponse);
     }
 
     private JobResponse mapToResponse(Job job) {
