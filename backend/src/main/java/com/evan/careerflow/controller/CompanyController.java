@@ -4,13 +4,13 @@ import com.evan.careerflow.dtos.CompanyRequest;
 import com.evan.careerflow.dtos.CompanyResponse;
 import com.evan.careerflow.service.CompanyService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -25,9 +25,25 @@ public class CompanyController {
 
     // Public / Open to all authenticated users
     @GetMapping("/companies")
-    public ResponseEntity<List<CompanyResponse>> getAllCompanies() {
+    public ResponseEntity<Page<CompanyResponse>> getAllCompanies(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         return new ResponseEntity<>(
-                companyService.getAllCompanies(),
+                companyService.getAllCompanies(page, size),
+                HttpStatus.OK
+        );
+    }
+
+    // Public / Open to all authenticated users
+    @GetMapping("/companies/search")
+    public ResponseEntity<Page<CompanyResponse>> searchCompanies(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return new ResponseEntity<>(
+                companyService.searchCompanies(keyword, page, size),
                 HttpStatus.OK
         );
     }

@@ -7,10 +7,11 @@ import com.evan.careerflow.models.Company;
 import com.evan.careerflow.models.User;
 import com.evan.careerflow.repo.CompanyRepo;
 import com.evan.careerflow.repo.UserRepo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CompanyService {
@@ -23,11 +24,14 @@ public class CompanyService {
         this.userRepo = userRepo;
     }
 
-    public List<CompanyResponse> getAllCompanies() {
-        return companyRepo.findAll()
-                .stream()
-                .map(this::convertToResponse)
-                .toList();
+    public Page<CompanyResponse> getAllCompanies(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return companyRepo.findAll(pageable).map(this::convertToResponse);
+    }
+
+    public Page<CompanyResponse> searchCompanies(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return companyRepo.searchCompanies(keyword, pageable).map(this::convertToResponse);
     }
 
     public CompanyResponse getCompanyById(int id) {
