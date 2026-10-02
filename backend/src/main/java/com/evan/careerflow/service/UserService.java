@@ -3,11 +3,13 @@ package com.evan.careerflow.service;
 import com.evan.careerflow.dtos.UserRequest;
 import com.evan.careerflow.dtos.UserResponse;
 import com.evan.careerflow.exceptionhandling.ResourceNotFoundException;
+import com.evan.careerflow.models.Role;
 import com.evan.careerflow.models.User;
 import com.evan.careerflow.repo.UserRepo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserService {
@@ -18,12 +20,21 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
-    public List<UserResponse> getAllUsers() {
-        return userRepo.findAll()
-                .stream()
-                .map(this::convertToResponse)
-                .toList();
+    // --- Pagination & Search Methods ---
+
+    public Page<UserResponse> getAllCandidates(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return userRepo.findByRole(Role.CANDIDATE, pageable)
+                .map(this::convertToResponse);
     }
+
+    public Page<UserResponse> searchCandidates(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return userRepo.searchByRoleAndKeyword(Role.CANDIDATE, keyword, pageable)
+                .map(this::convertToResponse);
+    }
+
+    // --- Standard CRUD Methods ---
 
     public UserResponse getUserById(int id) {
         User user = userRepo.findById(id)
